@@ -132,24 +132,7 @@ export function Filters() {
               Period <CaretDown size={16} />
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div>
-                <label>Initial Date</label>
-                <input
-                  type="date"
-                  {...register('period.initialDate')}
-                  {...register("period.initialDate")}
-                />
-              </div>
-
-              <div>
-                <label>Final Date</label>
-                <input
-                  type="date"
-                  {...register('period.finalDate')}
-                  {...register("period.finalDate")}
-                />
-              </div>
-              {/* <Controller
+              <Controller
                 name="period.initialDate"
                 control={control}
                 render={({ field }) => (
@@ -158,8 +141,8 @@ export function Filters() {
                     <input type="date" {...field} />
                   </div>
                 )}
-              /> */}
-              {/* <Controller
+              />
+              <Controller
                 name="period.finalDate"
                 control={control}
                 render={({ field }) => (
@@ -168,7 +151,7 @@ export function Filters() {
                     <input type="date" {...field} />
                   </div>
                 )}
-              /> */}
+              />
             </NavigationMenuContent>
           </NavigationMenu.Item>
 
