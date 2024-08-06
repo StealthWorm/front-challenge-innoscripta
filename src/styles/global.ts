@@ -13,22 +13,22 @@ export const GlobalStyle = createGlobalStyle`
       background: transparent;       
     }
     &::-webkit-scrollbar-thumb {
-      background-color: ${(props) => props.theme['blue-700']};    
+      /* background-color: ${(props) => props.theme['blue-700']};     */
       border-radius: 20px;
     }
   }
   :focus {
     outline: 0;
-    box-shadow: 0 0 0 2px ${(props) => props.theme['blue-500']};
+    /* box-shadow: 0 0 0 2px ${(props) => props.theme['purple-500']}; */
   }
   &:is(:hover, :active) {
     &::-webkit-scrollbar-thumb {
-      background-color: ${(props) => props.theme['blue-500']};
+      /* background-color: ${(props) => props.theme['blue-500']}; */
     }
   }
   body {
-    background-color: ${(props) => props.theme['blue-50']};
-    color: ${(props) => props.theme['blue-250']};
+    background-color: ${(props) => props.theme['gray-100']};
+    color: ${(props) => props.theme['gray-700']};
     -webkit-font-smoothing: antialiased;
   }
   body, input, textarea, button {
