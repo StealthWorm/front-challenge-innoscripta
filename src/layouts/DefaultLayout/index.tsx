@@ -8,7 +8,6 @@ export function DefaultLayout() {
     <LayoutContainer>
       <Header />
       <Outlet />
-      Made by Thierry
     </LayoutContainer>
   )
 }
