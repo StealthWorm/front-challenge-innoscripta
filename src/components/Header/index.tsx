@@ -6,8 +6,6 @@ export function Header() {
     <HeaderContainer>
       <HeaderContent>
         <h1>NEWS NOW</h1>
-
-        <SearchForm />
         {/* <img src={logoImg} alt="" /> */}
       </HeaderContent>
     </HeaderContainer>

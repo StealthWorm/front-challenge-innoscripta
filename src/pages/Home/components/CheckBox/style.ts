@@ -21,7 +21,8 @@ const slideOut = keyframes({
 
 export const CheckboxRoot = styled(Checkbox.Root)`
   all: unset;
-  background-color:  ${(props) => props.theme['gray-300']} ;
+  margin: .2rem 0;
+  background-color: ${(props) => props.theme['gray-300']} ;
   width: 24px;
   height: 24px;
   border-radius: 4px;

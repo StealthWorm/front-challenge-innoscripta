@@ -1,17 +1,22 @@
+import { News } from "../../../../store/news-slice";
+import { getFormattedDate } from "../../../../utils/date-formatter";
 import { NewsHeader, NewsItem } from "./styles";
 
-export function NewsCard() {
+export function NewsCard({ description, title, publishedAt, url, urlToImage, author }: News) {
   return (
     <NewsItem>
-      <div>
+      <a href={url} target="_blank">
         <NewsHeader>
-          <h2>Title</h2>
-          <span>10/10/2024</span>
+          <h3>{title}</h3>
+          <span>{getFormattedDate(publishedAt)}</span>
         </NewsHeader>
-        <img src={`https://picsum.photos/200`} alt="img" />
+        <img src={urlToImage} alt={title} />
 
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.sdasd</p>
-      </div>
+        <footer>
+          <p>{description}</p>
+          <span>{author}</span>
+        </footer>
+      </a>
     </NewsItem>
   )
 }
