@@ -1,7 +1,7 @@
 import { FormProps, News, Source } from '../store/news-slice';
 import { api } from './axios-base';
 
-const API_KEY = 'ec01d97b95cc46a48dc47e12697ac454'; //import.meta.env.VITE_NEWS_API_API_KEY;// 
+const API_KEY = import.meta.env.VITE_NEWS_API_API_KEY;
 const BASE_URL = 'https://newsapi.org/v2';
 
 export const NewsAPIService = {

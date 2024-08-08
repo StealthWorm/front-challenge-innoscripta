@@ -1,7 +1,7 @@
 import { FormProps, News, Source } from '../store/news-slice';
 import { api } from './axios-base';
 
-const API_KEY = import.meta.env.VITE_GUARDIAN_API_KEY;//  '2a5023c4-409d-4128-8250-9358a0f42a56';
+const API_KEY = import.meta.env.VITE_GUARDIAN_API_KEY;
 const BASE_URL = 'https://content.guardianapis.com';
 
 export const TheGuardianAPIService = {
