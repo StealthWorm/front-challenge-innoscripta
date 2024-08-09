@@ -1,3 +1,4 @@
+import { UUID } from 'uuidjs';
 import { FormProps, News, Source } from '../store/news-slice';
 import { api } from './axios-base';
 
@@ -5,53 +6,102 @@ const API_KEY = import.meta.env.VITE_NEWS_API_API_KEY;
 const BASE_URL = 'https://newsapi.org/v2';
 
 export const NewsAPIService = {
-  getNewsSources: async (): Promise<Source[]> => {
-    const response = await api.get(`${BASE_URL}/top-headlines/sources`, {
-      params: {
-        apiKey: API_KEY,
-      },
-    });
-
-    return response.data.sources.map((source: Source) => ({
-      id: source.id,
-      name: source.name,
-      category: source.name,
-      enabled: false,
-      origin: 'newsapi',
-    }));
-  },
-
-  getNews: async ({ query, period, categories }: FormProps): Promise<News[]> => {
-    let enabledCategoryNames: string[] = [];
-
-    if (categories && categories.length > 0) {
-      enabledCategoryNames = categories.map((category) => category.name.toLowerCase());
-    }
-
+  getNews: async ({ query, source, period, categories, page }: FormProps): Promise<News[]> => {
     const response = await api.get(`${BASE_URL}/everything`, {
       params: {
         'q': query,
         'from': period?.initialDate || '',
         'to': period?.finalDate || '',
+        'pageSize': 20,
+        page,
         'apiKey': API_KEY,
-        'sources': enabledCategoryNames.toString()
+        // 'sources': source,
       }
     });
 
-    const mapList: News[] = response.data.articles.map((article: News) => ({
-      id: (article.url).trim(),
-      title: article.title,
-      author: article.author,
-      source: {
-        id: article.source.id,
-        name: article.source.name,
-      },
-      description: article.description,
-      url: article.url,
-      urlToImage: article.urlToImage,
-      publishedAt: article.publishedAt,
-    }));
+    const sources = await fetchSources();
+
+    console.table(sources)
+
+    let mapList: News[] = response.data.articles.map((article: News) => {
+      const categoryName = sources.find(source => source.name === article.source.name)?.category || 'No category'
+      const articleId = article.source.id || categoryName.trim().toLowerCase();
+
+      return {
+        id: UUID.generate(),
+        title: article.title,
+        author: article.author,
+        source: {
+          id: articleId,
+          name: article.source.name,
+          category: categoryName,
+        },
+        description: article.description,
+        url: article.url,
+        urlToImage: article.urlToImage,
+        publishedAt: article.publishedAt,
+      }
+    });
+    // let sourceOriginsWithDefinedCategory: string[] = []
+
+    if (categories && categories.length > 0) {
+      const enabledCategoryNames = categories.map((category) => category.name.toLowerCase());
+
+      mapList = mapList.filter((article) => {
+        const categoryName = article.source.category.toLowerCase();
+
+        return enabledCategoryNames.includes(categoryName);
+      });
+    }
+
+    // if (categories && categories.length > 0) {
+    //   const sourcePromises = categories.map(category => fetchSourcesForCategory(category));
+    //   const sourcesResults = await Promise.all(sourcePromises)
+    //   // Flatten and aggregate sources
+    //   const sources = sourcesResults.flat();
+    //   // Extract and return unique source IDs
+    //   sourceOriginsWithDefinedCategory = Array.from(new Set(sources.map(source => source.id)));
+    //   // console.table(sourceOriginsWithDefinedCategory)
+    //   mapList = mapList.filter((article) => {
+    //     const sourceName = article.source.name.replace(' ', '-').trim().toLowerCase();
+
+    //     return sourceOriginsWithDefinedCategory.includes(sourceName);
+    //   });
+    // }
+
+    console.log('news api')
+    console.log(mapList)
 
     return mapList;
   },
 };
+
+// const fetchSourcesForCategory = async (category: Source): Promise<Source[]> => {
+//   try {
+//     const response = await api.get('https://newsapi.org/v2/top-headlines/sources', {
+//       params: {
+//         apiKey: API_KEY,
+//         category: category.name.toLowerCase(),
+//       }
+//     });
+
+//     return response.data.sources;
+//   } catch (error) {
+//     console.error(`Error fetching sources for category ${category}:`, error);
+//     return [];
+//   }
+// };
+
+async function fetchSources(): Promise<Source[]> {
+  const response = await api.get('https://newsapi.org/v2/top-headlines/sources', {
+    params: {
+      apiKey: API_KEY,
+    },
+  });
+
+  return response.data.sources.map((source: Source) => ({
+    id: source.id,
+    name: source.name,
+    category: source.category
+  }))
+}

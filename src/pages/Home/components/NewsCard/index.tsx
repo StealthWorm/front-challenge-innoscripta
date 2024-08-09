@@ -1,6 +1,6 @@
 import { News } from "../../../../store/news-slice";
 import { getFormattedDate } from "../../../../utils/date-formatter";
-import { NewsHeader, NewsItem } from "./styles";
+import { NewsFooter, NewsHeader, NewsItem } from "./styles";
 
 export function NewsCard({ description, title, publishedAt, url, urlToImage, author }: News) {
   return (
@@ -12,10 +12,10 @@ export function NewsCard({ description, title, publishedAt, url, urlToImage, aut
         </NewsHeader>
         <img src={urlToImage} alt={title} />
 
-        <footer>
+        <NewsFooter>
           <p>{description}</p>
           <span>{author}</span>
-        </footer>
+        </NewsFooter>
       </a>
     </NewsItem>
   )

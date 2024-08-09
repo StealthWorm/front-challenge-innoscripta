@@ -2,12 +2,14 @@ import styled from "styled-components"
 
 export const NewsItem = styled.li`
   display: flex;
-  max-width: 25rem;
-  max-height: 40rem;
   flex-direction: column;
+  max-width: 20rem;
+  height: 30rem;
   padding: 1rem;
   border-radius: 6px;
   box-shadow: 0 2px 10px ${(props) => props.theme['gray-600']};
+  overflow: hidden;
+  position: relative;
 
   a { 
     text-decoration: none;
@@ -19,9 +21,9 @@ export const NewsItem = styled.li`
 
   img {
     width: 100%;
-    margin: 1rem 0;
     aspect-ratio: 4/4;
     border-radius: 8px;
+    margin: 1rem 0;
   }
 
   p {
@@ -41,33 +43,20 @@ export const NewsItem = styled.li`
     transform: scale(1.01);
   }
 
-  footer {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    span {
-      display: flex;
-      font-size: 12px;
-      font-weight: bold;
-      justify-content: flex-end;
-      color: ${(props) => props.theme['violet-500']};
-    }
-  }
-
   @media only screen and (max-width: 600px) { 
     max-width: 100%;
+    height: max-content;
 
     img {
-      width: 5rem;
-      height: 5rem;
-      margin: 1rem 0;
-      aspect-ratio: 1/1;
+      width: 100%;
+      height: 50%;
+      margin: 0;
+      object-fit: cover;
     }
   }
 `
 
-export const NewsHeader = styled.div`
+export const NewsHeader = styled.header`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -95,5 +84,37 @@ export const NewsHeader = styled.div`
     font-size: 10px; 
     color: ${(props) => props.theme['gray-600']};
     font-weight: bold;
+  }
+
+  @media only screen and (max-width: 600px) { 
+    max-width: 100%;
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    span {
+      font-size: 8px;
+    }
+  }
+`
+
+export const NewsFooter = styled.footer`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-end;
+
+  p {
+    font-size: 0.8rem;
+  }
+
+  span {
+    display: flex;
+    font-size: 12px;
+    font-weight: bold;
+    justify-content: flex-end;
+    color: ${(props) => props.theme['violet-500']};
   }
 `

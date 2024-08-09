@@ -31,12 +31,12 @@ export const NavigationFormContainer = styled.form`
  position: relative;
  width: 100%;
  gap: 1rem;
- margin: 1rem 1.5rem;
  justify-content: center;
 
  button[type="submit"] {
   all: unset;
   width: auto;
+  margin: 1rem;
   display: flex;
   align-items: center;
   gap: .75rem;
@@ -72,14 +72,13 @@ export const NavigationFormContainer = styled.form`
 
   @media only screen and (max-width: 600px) { 
     padding: 1rem;
-    width: 100%;
+    width: 1rem;
     border-radius: 0;
     font-weight: 100;
-    right: 0;
-    top: 0;
     z-index: 2;
     align-items: center;
     justify-content: center;
+    margin: 0;
   }
 }
 
@@ -91,18 +90,22 @@ export const NavigationFormContainer = styled.form`
 
 export const NavigationContainer = styled(NavigationMenu.Root)`
   display: flex;
-  width: auto;
+  width: 100%;
+  padding: 1rem;
   justify-content: flex-start;
   z-index: 1;
+  gap: 1rem;
 
   @media only screen and (max-width: 600px) { 
     justify-content: center;
+    flex-direction: column;
+    padding: 0 .5rem 0 0;
   }
 `
 
 export const NavigationList = styled(NavigationMenu.List)`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;  
   background: ${(props) => props.theme['gray-100']};
   padding: 4px;
@@ -112,7 +115,7 @@ export const NavigationList = styled(NavigationMenu.List)`
   gap: .5rem;
 
   @media only screen and (max-width: 600px) { 
-    gap: 0;
+    gap: ;
     border-radius: 0;
   }
 `
@@ -124,11 +127,11 @@ export const NavigationMenuTrigger = styled(NavigationMenu.Trigger)`
   gap: .5rem;
   height: 100%;
   position: relative;
-  padding: 8px 16px;
+  padding: .5rem 1rem;
   outline: none;
   user-select: none;
   font-weight: 500;
-  line-height: 2;
+  line-height: 1.8;
   border-radius: 6px;
   font-size: 16px;
   color: ${(props) => props.theme['purple-500']};
@@ -186,7 +189,8 @@ export const NavigationMenuContent = styled(NavigationMenu.Content) <ContentProp
 export const NavigationMenuViewport = styled(NavigationMenu.Viewport)`
   position: absolute;
   margin-top: 4rem;
-  left: 0;
+  width: auto;
+  left: 30%;
   overflow-y: scroll;
   background-color: ${(props) => props.theme['gray-50']};
   border-radius: 6px;
@@ -202,6 +206,13 @@ export const NavigationMenuViewport = styled(NavigationMenu.Viewport)`
 
   &[data-state="closed"] { 
     animation: ${scaleOut} 200ms ease;
+  }
+
+  @media only screen and (max-width: 600px) { 
+    width: 50%;
+    left: 0;
+    flex-direction: column;
+    margin-top: 18rem;
   }
 `;
 
@@ -235,5 +246,13 @@ export const SelectionInput = styled.select`
   cursor: pointer;
   position: relative;
 `
+
+export const Separator = styled.div`
+  display: inline-block;
+  width: 10px;
+  height: 100%;
+  color: ${(props) => props.theme['violet-500']};
+`
+
 
 

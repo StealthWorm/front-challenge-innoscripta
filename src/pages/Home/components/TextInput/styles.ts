@@ -28,6 +28,11 @@ export const TextInputContainer = styled.div`
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  @media only screen and (max-width: 600px) { 
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 export const Input = styled.input`
@@ -49,5 +54,12 @@ export const Input = styled.input`
 
   &::placeholder {
     color: ${(props) => props.theme['gray-500']};
+  }
+
+  @media only screen and (max-width: 600px) { 
+    width: 10rem;
+    /* flex-direction: column;
+    margin-top: 20rem;
+    right: 0; */
   }
 `;

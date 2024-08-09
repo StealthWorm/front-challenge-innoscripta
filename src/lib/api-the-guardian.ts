@@ -1,54 +1,39 @@
-import { FormProps, News, Source } from '../store/news-slice';
+import { UUID } from 'uuidjs';
+import { FormProps, News } from '../store/news-slice';
 import { api } from './axios-base';
 
 const API_KEY = import.meta.env.VITE_GUARDIAN_API_KEY;
 const BASE_URL = 'https://content.guardianapis.com';
 
 export const TheGuardianAPIService = {
-  getSources: async (): Promise<Source[]> => {
+  getNews: async ({ query, source, period, categories, page }: FormProps): Promise<News[]> => {
+    const encodedQuery = encodeURIComponent(query || '');
+
     const response = await api.get(`${BASE_URL}/search`, {
       params: {
-        'show-tags': 'contributor',
-        'page-size': 100,
-        'api-key': API_KEY,
-      },
-    });
-
-    return response.data.response.results.map((article: any) => ({
-      id: article.id,
-      name: article.sectionName,
-      category: article.pillarName,
-      enabled: false,
-      origin: 'guardian api',
-    }));
-  },
-
-  getNews: async ({ query, period, categories }: FormProps): Promise<News[]> => {
-    const response = await api.get(`${BASE_URL}/search`, {
-      params: {
-        'q': query,
+        'q': encodedQuery,
         'from-date': period?.initialDate || '',
         'to-date': period?.finalDate || '',
         'show-tags': 'contributor',
         'show-elements': 'image',
-        'show-fields': 'headline,body',
-        // 'order-by': 'relevance',
-        'page-size': 100,
+        'show-fields': 'headline,body,publication',
+        'page-size': 20,
+        page,
         'api-key': API_KEY,
       },
     });
 
     let mapList: News[] = response.data.response.results.map((article: any) => {
       const contributorTag = article.tags.find((tag: any) => tag.type === 'contributor');
-      // const slugTag = article.elements.find((element: any) => element.assets[0].file)
 
       return {
         id: article.id,
         title: article.fields ? article.fields.headline : article.webTitle,
         author: contributorTag ? contributorTag.webTitle : 'Unknown Author',
         source: {
-          id: (article.id + article.sectionName).trim().toLowerCase(),
-          name: article.pillarName.toLowerCase(),
+          id: UUID.generate(),
+          name: article.fields.publication,
+          category: article.pillarName.toLowerCase(),
         },
         description: article.fields ? article.fields.body : '',
         url: article.webUrl,
@@ -57,15 +42,26 @@ export const TheGuardianAPIService = {
       }
     });
 
+    // Filter by category
     if (categories && categories.length > 0) {
       const enabledCategoryNames = categories.map((category) => category.name.toLowerCase());
 
       mapList = mapList.filter((article) => {
-        const sourceName = article.source.name;
+        const categoryName = article.source.category.toLowerCase();
 
-        return enabledCategoryNames.includes(sourceName);
+        return enabledCategoryNames.includes(categoryName);
       });
     }
+
+    // Filter by source
+    if (source) {
+      mapList = mapList.filter((article) =>
+        article.source.name.trim().toLowerCase().includes(source.trim().toLowerCase())
+      );
+    }
+
+    console.log('guardian api')
+    console.log(mapList)
 
     return mapList;
   },

@@ -1,14 +1,15 @@
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { CaretDown, MagnifyingGlass } from 'phosphor-react'
-import { CategoryItem, NavigationContainer, NavigationFormContainer, NavigationList, NavigationMenuContent, NavigationMenuIndicator, NavigationMenuTrigger, NavigationMenuViewport, SelectionInput } from './styles'
+import { CategoryItem, NavigationContainer, NavigationFormContainer, NavigationList, NavigationMenuContent, NavigationMenuIndicator, NavigationMenuTrigger, NavigationMenuViewport, SelectionInput, Separator } from './styles'
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../CheckBox'
 import { TextInput } from '../TextInput'
 import { SearchForm } from '../../../../components/SearchForm'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchNews } from '../../../../store/news-slice'
+import { RootState } from '../../../../store'
 
 const filterFormSchema = z.object({
   query: z.string().min(1, { message: "Must be 1 or more characters long" }),
@@ -26,39 +27,20 @@ const filterFormSchema = z.object({
     initialDate: z.string({ message: "Initial date is required" }),
     finalDate: z.string({ message: "Final date is required" })
   }),
-  // source: z.string().optional(),
+  source: z.string().optional(),
 })
-
-const currentDate = new Date().toISOString().split('T')[0];
 
 type FilterFormInput = z.input<typeof filterFormSchema>
 type FilterFormOutput = z.output<typeof filterFormSchema>
 
-// const fontSources = [
-//   { "id": "1", "name": "BBC News" },
-//   { "id": "2", "name": "CNN" },
-//   { "id": "3", "name": "The New York Times" },
-//   { "id": "4", "name": "The Guardian" },
-//   { "id": "5", "name": "Reuters" },
-//   { "id": "6", "name": "Al Jazeera" },
-//   { "id": "7", "name": "Fox News" },
-//   { "id": "8", "name": "NBC News" },
-//   { "id": "9", "name": "CBS News" },
-//   { "id": "10", "name": "ABC News" },
-//   { "id": "11", "name": "Bloomberg" },
-//   { "id": "12", "name": "The Washington Post" },
-//   { "id": "13", "name": "Financial Times" },
-//   { "id": "14", "name": "The Wall Street Journal" },
-//   { "id": "15", "name": "Forbes" },
-//   { "id": "16", "name": "Business Insider" },
-//   { "id": "17", "name": "USA Today" },
-//   { "id": "18", "name": "Los Angeles Times" },
-//   { "id": "19", "name": "Time" },
-//   { "id": "20", "name": "The Telegraph" }
-// ]
+const initialDate = new Date();
+initialDate.setDate(1);
+const initialDateString = initialDate.toISOString().split('T')[0];
+const currentDate = new Date().toISOString().split('T')[0];
 
 export function Filters() {
   const dispatch = useDispatch();
+  const { formData } = useSelector((state: RootState) => state.news);
 
   const newsForm = useForm<FilterFormInput>({
     resolver: zodResolver(filterFormSchema),
@@ -75,16 +57,16 @@ export function Filters() {
         { id: '9', name: 'lifestyle', enabled: false },
         { id: '10', name: 'opinion', enabled: false },
         { id: '11', name: 'technology', enabled: false },
-        { id: '12', name: 'Society', enabled: false },
-        { id: '13', name: 'Wellness', enabled: false },
+        { id: '12', name: 'society', enabled: false },
+        { id: '13', name: 'wellness', enabled: false },
         { id: '14', name: 'film', enabled: false },
       ],
       period: {
-        initialDate: currentDate,
+        initialDate: initialDateString,
         finalDate: currentDate,
       },
       query: '',
-      // source: '',
+      source: '',
     }
   })
 
@@ -101,10 +83,7 @@ export function Filters() {
 
   const handleOnSubmit = async (data: FilterFormOutput) => {
     // console.log(data)
-    // const { query, period, categories } = data as FilterFormOutput;
-
-    // const response = await NewsService.getCombinedNews({ query, period, categories });
-    dispatch(fetchNews(data));
+    dispatch(fetchNews({ ...data, page: formData.page }));
   };
 
   return (
@@ -113,9 +92,13 @@ export function Filters() {
         <NavigationContainer>
           <NavigationList>
             <NavigationMenu.Item>
-              <SearchForm />
+              <SearchForm name='query' placeholder='Search Keyword' />
             </NavigationMenu.Item>
-
+            <NavigationMenu.Item>
+              <SearchForm name='source' placeholder='Search Source' icon={false} />
+            </NavigationMenu.Item>
+          </NavigationList>
+          <NavigationList>
             <NavigationMenu.Item>
               <NavigationMenuTrigger
                 onPointerMove={(event) => event.preventDefault()}

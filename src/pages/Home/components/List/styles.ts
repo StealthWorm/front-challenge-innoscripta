@@ -4,32 +4,35 @@ export const NewsList = styled.ul`
   display: grid;
   gap: 2.5rem;
   width: 100%;
-  padding: 0 5rem;
-  margin-top: 2rem;
+  padding: .5rem 5rem;
+  max-height: calc(100vh - 200px);
+  overflow-y: scroll;
+  grid-template-columns: repeat(4, 1fr);
 
-  @media (min-width: 768px) {
+  @media (max-width: 850px) {
     grid-template-columns: repeat(3, 1fr);
-  }
+    gap: 2rem;
+    padding: .5rem 2rem;
+  };
 
   @media (max-width: 767px) {
-    grid-template-columns: 1fr;
-    display: grid;
-    gap: .5rem;
-    width: 100%;
-    padding: 0 1rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: .5rem 2rem;
   }
+
+  @media (max-width: 650px) {
+    grid-template-columns: 1fr;
+  };
 `;
 
-export const EmptyListItem = styled.h1`
+export const Loading = styled.h3`
   position: absolute;
   left: 0;
   display: flex;
-  height: 100%;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  color: ${(props) => props.theme['gray-300']};
   width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme['gray-500']};
 `
