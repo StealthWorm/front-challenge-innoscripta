@@ -63,7 +63,7 @@ docker build -t <docker-image> .
 Alternatively, you can pull the image directly from the Docker Hub
 
 ```bash
-docker pull thierry20xx/innoscripta-front-image:1.0.0
+docker pull thierry20xx/innoscripta-front-image:1.1.0
 
 ```
 
@@ -100,6 +100,7 @@ Suggestions for potential improvements or additional features:
 - **Improvement 3:** Figure out how to improve the Redux Store management system.
 - **Improvement 4:** Improve the reliability in the API Promises
 - **Improvement 5:** Create a better architecture for the service handler that deals with all the promises
+- **Improvement 6:** Fix and configure CI/CD pipeline
 
 ## Final Considerations
 
