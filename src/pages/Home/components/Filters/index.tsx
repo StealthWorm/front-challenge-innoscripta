@@ -1,6 +1,14 @@
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { CaretDown, MagnifyingGlass } from 'phosphor-react'
-import { CategoryItem, NavigationContainer, NavigationFormContainer, NavigationList, NavigationMenuContent, NavigationMenuTrigger, NavigationMenuViewport, SelectionInput, Separator } from './styles'
+import {
+  CategoryItem,
+  NavigationContainer,
+  NavigationFormContainer,
+  NavigationList,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuViewport
+} from './styles'
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
