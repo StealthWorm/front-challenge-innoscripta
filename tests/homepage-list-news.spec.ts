@@ -63,6 +63,9 @@ test.describe('NewsListContent Component', () => {
 
   test('should display news items correctly', async ({ page }) => {
     const newsItems = await page.locator('li[data-test-id="news-card"]');
+
+    console.log(newsItems)
+
     await expect(newsItems).toHaveCount(mockNewsResponse.articles.length);
 
     const firstNewsTitle = await page.locator('h3').first();
