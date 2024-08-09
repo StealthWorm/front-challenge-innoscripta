@@ -73,6 +73,7 @@ After building the image, run the Docker container:
 
 ```bash
 docker run -p 3000:3000 -d --name <docker-container> <docker-image>
+
 ```
 
 The project will be available at `http://localhost:3000`.
