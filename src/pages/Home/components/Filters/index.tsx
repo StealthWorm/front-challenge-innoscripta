@@ -64,10 +64,9 @@ export function Filters() {
         { id: '8', name: 'news', enabled: false },
         { id: '9', name: 'lifestyle', enabled: false },
         { id: '10', name: 'opinion', enabled: false },
-        { id: '11', name: 'technology', enabled: false },
-        { id: '12', name: 'society', enabled: false },
-        { id: '13', name: 'wellness', enabled: false },
-        { id: '14', name: 'film', enabled: false },
+        { id: '11', name: 'society', enabled: false },
+        { id: '12', name: 'wellness', enabled: false },
+        { id: '13', name: 'film', enabled: false },
       ],
       period: {
         initialDate: initialDateString,
@@ -105,15 +104,17 @@ export function Filters() {
               <SearchForm name='source' placeholder='Search Source' icon={false} />
             </NavigationMenu.Item>
           </NavigationList>
+
           <NavigationList>
             <NavigationMenu.Item>
               <NavigationMenuTrigger
                 onPointerMove={(event) => event.preventDefault()}
                 onPointerLeave={(event) => event.preventDefault()}
+                name='period'
               >
                 Period <CaretDown size={16} />
               </NavigationMenuTrigger>
-              <NavigationMenuContent orientation="row">
+              <NavigationMenuContent orientation="row" data-test-id="dateList">
                 <Controller
                   name="period.initialDate"
                   control={control}
@@ -144,11 +145,12 @@ export function Filters() {
               <NavigationMenuTrigger
                 onPointerMove={(event) => event.preventDefault()}
                 onPointerLeave={(event) => event.preventDefault()}
+                name='categories'
               >
                 Categories <CaretDown size={16} />
               </NavigationMenuTrigger>
 
-              <NavigationMenuContent>
+              <NavigationMenuContent data-test-id="categoriesList">
                 {fields.map((category, index) => {
                   return (
                     <CategoryItem key={category.id}>
@@ -159,7 +161,7 @@ export function Filters() {
                           return (
                             <Checkbox
                               id={`category-${index}`}
-                              name={`categories.${index}.enabled`}
+                              name={`categories.${index}.name`}
                               checked={field.value}
                               onCheckedChange={(checked) =>
                                 field.onChange(checked === true)
@@ -168,7 +170,7 @@ export function Filters() {
                           )
                         }}
                       />
-                      <span>{category.name}</span>
+                      <span data-test-id="category-name">{category.name}</span>
                     </CategoryItem>
                   )
                 })}

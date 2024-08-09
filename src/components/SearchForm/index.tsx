@@ -17,7 +17,7 @@ export function SearchForm({ name, placeholder, icon = true }: SearchFormProps) 
   };
 
   return (
-    <SearchFormContainer>
+    <SearchFormContainer data-test-id="form-input">
       {icon && <MagnifyingGlass weight='bold' size={16} />}
       <input
         type="text"

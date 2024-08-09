@@ -4,7 +4,7 @@ import { NewsFooter, NewsHeader, NewsItem } from "./styles";
 
 export function NewsCard({ description, title, publishedAt, url, urlToImage, author }: News) {
   return (
-    <NewsItem>
+    <NewsItem data-test-id="news-card">
       <a href={url} target="_blank">
         <NewsHeader>
           <h3>{title}</h3>

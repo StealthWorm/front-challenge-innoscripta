@@ -15,13 +15,15 @@ export const NewsAPIService = {
         'pageSize': 20,
         page,
         'apiKey': API_KEY,
-        'sources': source?.trim().replace(' ', '-').toLowerCase(),
+        ...(
+          source && {
+            sources: source?.trim().replace(' ', '-').toLowerCase()
+          }
+        )
       }
     });
 
     const sources = await fetchSources();
-
-    console.table(sources)
 
     let mapList: News[] = response.data.articles.map((article: News) => {
       const articleId = article.source.id || sources.find(source => source.name === article.source.name)?.category.trim().toLowerCase();
@@ -51,8 +53,8 @@ export const NewsAPIService = {
       });
     }
 
-    // console.log('news api')
-    // console.log(mapList)
+    console.log('news api')
+    console.log(mapList)
 
     return mapList;
   },
@@ -71,38 +73,5 @@ async function fetchSources(): Promise<Source[]> {
     category: source.category
   }))
 }
-
-// let sourceOriginsWithDefinedCategory: string[] = []
-
-// if (categories && categories.length > 0) {
-//   const sourcePromises = categories.map(category => fetchSourcesForCategory(category));
-//   const sourcesResults = await Promise.all(sourcePromises)
-//   // Flatten and aggregate sources
-//   const sources = sourcesResults.flat();
-//   // Extract and return unique source IDs
-//   sourceOriginsWithDefinedCategory = Array.from(new Set(sources.map(source => source.id)));
-//   // console.table(sourceOriginsWithDefinedCategory)
-//   mapList = mapList.filter((article) => {
-//     const sourceName = article.source.name.replace(' ', '-').trim().toLowerCase();
-
-//     return sourceOriginsWithDefinedCategory.includes(sourceName);
-//   });
-// }
-
-// const fetchSourcesForCategory = async (category: Source): Promise<Source[]> => {
-//   try {
-//     const response = await api.get('https://newsapi.org/v2/top-headlines/sources', {
-//       params: {
-//         apiKey: API_KEY,
-//         category: category.name.toLowerCase(),
-//       }
-//     });
-
-//     return response.data.sources;
-//   } catch (error) {
-//     console.error(`Error fetching sources for category ${category}:`, error);
-//     return [];
-//   }
-// };
 
 
