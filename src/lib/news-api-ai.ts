@@ -13,11 +13,12 @@ export const NewsAPI_AIService = {
       articlesCount: 20,
       articlesPage: page,
       apiKey: API_KEY,
+      ...(
+        source && {
+          sourceUri: source
+        }
+      )
     };
-
-    if (source) {
-      params.sourceUri = source;
-    }
 
     const response = await api.get(`${BASE_URL}/article/getArticles`, { params });
 
@@ -47,8 +48,8 @@ export const NewsAPI_AIService = {
       });
     }
 
-    console.log('newsapi ai')
-    console.log(mapList)
+    // console.log('newsapi ai')
+    // console.log(mapList)
 
     return mapList;
   },

@@ -9,13 +9,16 @@ export function NewsListContent() {
 
   return (
     <>
-      {news.length === 0 ? (
-        <EmptyListItem>No news available, try another search</EmptyListItem>
-      ) : (
-        news.map((newsItem: News) => (
-          <NewsCard key={newsItem.id} {...newsItem} />
-        ))
-      )}
+      {news.length === 0 ?
+        (
+          <EmptyListItem>No news available, try another search</EmptyListItem>
+        )
+        :
+        (
+          news.map((newsItem: News) => (
+            <NewsCard key={newsItem.id} {...newsItem} />
+          ))
+        )}
     </>
   );
 }

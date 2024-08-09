@@ -9,8 +9,8 @@ export const TextInput = forwardRef<ElementRef<typeof Input>, TextInputProps>(
   ({ labelName, ...props }: TextInputProps, ref) => {
     return (
       <TextInputContainer>
-        {!!labelName && <label htmlFor={labelName}>{labelName}</label>}
-        <Input ref={ref} {...props} id={labelName} />
+        {!!labelName && <label htmlFor={props.id}>{labelName}</label>}
+        <Input ref={ref} {...props} id={props.id} name={props.name} />
       </TextInputContainer>
     )
   },
