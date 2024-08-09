@@ -6,22 +6,24 @@ const API_KEY = import.meta.env.VITE_GUARDIAN_API_KEY;
 const BASE_URL = 'https://content.guardianapis.com';
 
 export const TheGuardianAPIService = {
-  getNews: async ({ query, source, period, categories, page }: FormProps): Promise<News[]> => {
+  getNews: async (props: FormProps): Promise<News[]> => {
+    const { query, source, period, categories, page } = props;
+
     const encodedQuery = encodeURIComponent(query || '');
 
-    const response = await api.get(`${BASE_URL}/search`, {
-      params: {
-        'q': encodedQuery,
-        'from-date': period?.initialDate || '',
-        'to-date': period?.finalDate || '',
-        'show-tags': 'contributor',
-        'show-elements': 'image',
-        'show-fields': 'headline,body,publication',
-        'page-size': 20,
-        page,
-        'api-key': API_KEY,
-      },
-    });
+    const params = {
+      'q': encodedQuery,
+      'from-date': period?.initialDate || '',
+      'to-date': period?.finalDate || '',
+      'show-tags': 'contributor',
+      'show-elements': 'image',
+      'show-fields': 'headline,body,publication',
+      'page-size': 20,
+      page,
+      'api-key': API_KEY,
+    };
+
+    const response = await api.get(`${BASE_URL}/search`, { params });
 
     let mapList: News[] = response.data.response.results.map((article: any) => {
       const contributorTag = article.tags.find((tag: any) => tag.type === 'contributor');
@@ -47,9 +49,7 @@ export const TheGuardianAPIService = {
       const enabledCategoryNames = categories.map((category) => category.name.toLowerCase());
 
       mapList = mapList.filter((article) => {
-        const categoryName = article.source.category.toLowerCase();
-
-        return enabledCategoryNames.includes(categoryName);
+        return enabledCategoryNames.includes(article.source.category.toLowerCase());
       });
     }
 
@@ -60,8 +60,8 @@ export const TheGuardianAPIService = {
       );
     }
 
-    console.log('guardian api')
-    console.log(mapList)
+    // console.log('guardian api')
+    // console.log(mapList)
 
     return mapList;
   },

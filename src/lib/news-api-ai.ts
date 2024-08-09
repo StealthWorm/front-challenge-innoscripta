@@ -47,8 +47,8 @@ export const NewsAPI_AIService = {
       });
     }
 
-    console.log('newsapi ai')
-    console.log(mapList)
+    // console.log('newsapi ai')
+    // console.log(mapList)
 
     return mapList;
   },

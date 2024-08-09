@@ -15,7 +15,7 @@ export const NewsAPIService = {
         'pageSize': 20,
         page,
         'apiKey': API_KEY,
-        // 'sources': source,
+        'sources': source?.trim().replace(' ', '-').toLowerCase(),
       }
     });
 
@@ -24,8 +24,8 @@ export const NewsAPIService = {
     console.table(sources)
 
     let mapList: News[] = response.data.articles.map((article: News) => {
+      const articleId = article.source.id || sources.find(source => source.name === article.source.name)?.category.trim().toLowerCase();
       const categoryName = sources.find(source => source.name === article.source.name)?.category || 'No category'
-      const articleId = article.source.id || categoryName.trim().toLowerCase();
 
       return {
         id: UUID.generate(),
@@ -42,39 +42,52 @@ export const NewsAPIService = {
         publishedAt: article.publishedAt,
       }
     });
-    // let sourceOriginsWithDefinedCategory: string[] = []
 
     if (categories && categories.length > 0) {
       const enabledCategoryNames = categories.map((category) => category.name.toLowerCase());
 
       mapList = mapList.filter((article) => {
-        const categoryName = article.source.category.toLowerCase();
-
-        return enabledCategoryNames.includes(categoryName);
+        return enabledCategoryNames.includes(article.source.category.toLowerCase());
       });
     }
 
-    // if (categories && categories.length > 0) {
-    //   const sourcePromises = categories.map(category => fetchSourcesForCategory(category));
-    //   const sourcesResults = await Promise.all(sourcePromises)
-    //   // Flatten and aggregate sources
-    //   const sources = sourcesResults.flat();
-    //   // Extract and return unique source IDs
-    //   sourceOriginsWithDefinedCategory = Array.from(new Set(sources.map(source => source.id)));
-    //   // console.table(sourceOriginsWithDefinedCategory)
-    //   mapList = mapList.filter((article) => {
-    //     const sourceName = article.source.name.replace(' ', '-').trim().toLowerCase();
-
-    //     return sourceOriginsWithDefinedCategory.includes(sourceName);
-    //   });
-    // }
-
-    console.log('news api')
-    console.log(mapList)
+    // console.log('news api')
+    // console.log(mapList)
 
     return mapList;
   },
 };
+
+async function fetchSources(): Promise<Source[]> {
+  const response = await api.get('https://newsapi.org/v2/top-headlines/sources', {
+    params: {
+      apiKey: API_KEY,
+    },
+  });
+
+  return response.data.sources.map((source: Source) => ({
+    id: source.id,
+    name: source.name,
+    category: source.category
+  }))
+}
+
+// let sourceOriginsWithDefinedCategory: string[] = []
+
+// if (categories && categories.length > 0) {
+//   const sourcePromises = categories.map(category => fetchSourcesForCategory(category));
+//   const sourcesResults = await Promise.all(sourcePromises)
+//   // Flatten and aggregate sources
+//   const sources = sourcesResults.flat();
+//   // Extract and return unique source IDs
+//   sourceOriginsWithDefinedCategory = Array.from(new Set(sources.map(source => source.id)));
+//   // console.table(sourceOriginsWithDefinedCategory)
+//   mapList = mapList.filter((article) => {
+//     const sourceName = article.source.name.replace(' ', '-').trim().toLowerCase();
+
+//     return sourceOriginsWithDefinedCategory.includes(sourceName);
+//   });
+// }
 
 // const fetchSourcesForCategory = async (category: Source): Promise<Source[]> => {
 //   try {
@@ -92,16 +105,4 @@ export const NewsAPIService = {
 //   }
 // };
 
-async function fetchSources(): Promise<Source[]> {
-  const response = await api.get('https://newsapi.org/v2/top-headlines/sources', {
-    params: {
-      apiKey: API_KEY,
-    },
-  });
 
-  return response.data.sources.map((source: Source) => ({
-    id: source.id,
-    name: source.name,
-    category: source.category
-  }))
-}
